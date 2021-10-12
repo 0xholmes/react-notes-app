@@ -1,11 +1,21 @@
-import React from "react"
+import React, { useState, useEffect } from "react"
 import { Link } from "react-router-dom"
 import { ReactComponent as ArrowLeft } from "../assets/arrow-left.svg"
-import notes from "../assets/data"
 
 const NotePage = ({ match }) => {
-  let noteId = match.params.id
-  let note = notes.find(note => note.id == noteId)
+  const noteId = match.params.id
+
+  const [note, setNote] = useState(null)
+
+  useEffect(() => {
+    getNote()
+  }, [noteId])
+
+  const getNote = async () => {
+    const res = await fetch(`http://localhost:5000/notes/${noteId}`)
+    const data = await res.json()
+    setNote(data)
+  }
 
   return (
     <div className="note">
